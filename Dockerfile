@@ -1,16 +1,8 @@
-FROM nvidia/cuda:12.1.0-base-ubuntu22.04
+FROM nvidia/cuda:12.1.0-devel-ubuntu22.04
 
 # Install necessary system dependencies
 RUN apt-get update && apt-get install -y \
     git \
-    cmake \
-    ninja-build \
-    build-essential \
-    libopenblas-dev \
-    python3-dev \
-    python3-venv \
-    python3-pip \
-    nvidia-cuda-toolkit \
     gcc-12 g++-12 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -42,7 +34,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Manually build llama-cpp-python
 RUN git clone --recursive https://github.com/abetlen/llama-cpp-python.git && \
     cd llama-cpp-python && \
-    pip install --no-cache-dir .
+    python3 -m pip install --no-cache-dir .
 
 ENV PYTHONPATH="/:/vllm-workspace"
 
