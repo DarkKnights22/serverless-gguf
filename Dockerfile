@@ -27,7 +27,7 @@ ENV CXXFLAGS="-Wno-error=deprecated-declarations"
 
 # Set CUDA paths
 ENV PATH="/usr/local/cuda/bin:${PATH}"
-ENV LD_LIBRARY_PATH="/usr/lib64/nvidia:${LD_LIBRARY_PATH}"
+#ENV LD_LIBRARY_PATH="/usr/lib64/nvidia:${LD_LIBRARY_PATH}"
 ENV CUDA_HOME="/usr/local/cuda"
 ENV CUDA_TOOLKIT_ROOT_DIR="/usr/local/cuda"
 ENV CMAKE_ARGS="-DGGML_CUDA=on -DLLAMA_BUILD_EXAMPLES=OFF -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -DCMAKE_CXX_COMPILER=g++-12 -DCMAKE_C_COMPILER=gcc-12"
