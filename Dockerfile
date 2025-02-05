@@ -11,7 +11,12 @@ ENV CMAKE_ARGS="-DGGML_CUDA=on"
 RUN apt-get update && apt-get install -y \
     git \
     nvidia-cuda-toolkit \
+    gcc-10 g++-10 \
     && rm -rf /var/lib/apt/lists/*
+
+# Ensure GCC 10 is used
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
 
 # Install Python dependencies
 COPY builder/requirements.txt /requirements.txt
