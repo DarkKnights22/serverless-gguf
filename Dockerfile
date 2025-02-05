@@ -28,13 +28,13 @@ ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -D
 # Install Python dependencies
 COPY builder/requirements.txt /requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip \
-    python3 -m pip install --upgrade pip && \
-    python3 -m pip install --upgrade -r /requirements.txt
+    pip install --upgrade pip && \
+    pip install --upgrade -r /requirements.txt
 
 # Manually build llama-cpp-python
 RUN git clone --recursive https://github.com/abetlen/llama-cpp-python.git && \
     cd llama-cpp-python && \
-    python3 -m pip install --no-cache-dir .
+    pip install --no-cache-dir .
 
 ENV PYTHONPATH="/:/vllm-workspace"
 
