@@ -6,6 +6,10 @@ RUN apt-get update -y \
 RUN ldconfig /usr/local/cuda-12.1/compat/
 
 ENV CMAKE_ARGS="-DGGML_CUDA=on"
+# ENV CUDA_TOOLKIT_ROOT_DIR="/usr/local/cuda-12.1"
+
+RUN apt-get update && apt-get install -y nvidia-cuda-toolkit && rm -rf /var/lib/apt/lists/*
+
 
 # Install Python dependencies
 COPY builder/requirements.txt /requirements.txt
