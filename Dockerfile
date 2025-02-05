@@ -12,6 +12,7 @@ FROM runpod/base:0.4.0-cuda11.8.0
 # RUN /bin/bash /setup.sh && \
 #     rm /setup.sh
 
+ENV CMAKE_ARGS="-DGGML_CUDA=on"
 
 # Python dependencies
 COPY builder/requirements.txt /requirements.txt
