@@ -15,10 +15,15 @@ gguf_engine = engine.GGUFEngine()
 
 async def handler(job):
     """ Handler function that will be used to process jobs. """
-    job_input = job["input"]
+    try:
+        job_input = job["input"]
 
-    response = await gguf_engine.async_chat_completion(job_input)
-    return response
+        response = await gguf_engine.async_chat_completion(job_input)
+        return response
+    except Exception as e:
+        print({"errorrrr": str(e)})
+        import traceback
+        traceback.print_exc()
 
 
 runpod.serverless.start({
