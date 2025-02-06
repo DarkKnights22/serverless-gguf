@@ -1,14 +1,29 @@
 """ Example handler file. """
-import os
 
-import llama_cpp
+import logging
+import sys
+import traceback
+
 import runpod
+
 import engine
 
-# TODO: CMAKE_ARGS="-DGGML_CUDA=on" pip install llama-cpp-python on docker container install
 
-# If your handler runs inference on a model, load the model here.
-# You will want models to be loaded into memory before starting serverless.
+# Restore default exception handling
+def custom_excepthook(exc_type, exc_value, exc_traceback):
+    logging.error("⚠️ Uncaught Exception!")
+    logging.error(f"Exception Type: {exc_type.__name__}")
+    logging.error(f"Exception Message: {exc_value}")
+    logging.error("🔍 Full Tracebackk:")
+    print("🔍 Full Tracebackk:")
+    traceback.print_exception(exc_type, exc_value, exc_traceback)  # Print full error
+
+
+# Override RunPod's excepthook
+sys.excepthook = custom_excepthook
+
+# Configure logging to make sure it appears in RunPod logs
+logging.basicConfig(level=logging.DEBUG)
 
 gguf_engine = engine.GGUFEngine()
 
