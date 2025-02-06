@@ -32,6 +32,8 @@ ENV PATH="/usr/local/cuda/bin:${PATH}"
 #ENV CUDA_TOOLKIT_ROOT_DIR="/usr/local/cuda"
 ENV CMAKE_ARGS="-DGGML_CUDA=on -DLLAMA_BUILD_EXAMPLES=OFF -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc -DCMAKE_CXX_COMPILER=g++-12 -DCMAKE_C_COMPILER=gcc-12"
 
+RUN echo "Current LD_LIBRARY_PATH is: $LD_LIBRARY_PATH"
+
 # Install Python dependencies
 COPY builder/requirements.txt /requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip \
