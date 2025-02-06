@@ -10,7 +10,12 @@ import engine
 # If your handler runs inference on a model, load the model here.
 # You will want models to be loaded into memory before starting serverless.
 
-gguf_engine = engine.GGUFEngine()
+try:
+    gguf_engine = engine.GGUFEngine()
+except Exception as e:
+    print({"errorrrr456": str(e)})
+    import traceback
+    traceback.print_exc()
 
 
 async def handler(job):
@@ -21,7 +26,7 @@ async def handler(job):
         response = await gguf_engine.async_chat_completion(job_input)
         return response
     except Exception as e:
-        print({"errorrrr": str(e)})
+        print({"errorrrr112": str(e)})
         import traceback
         traceback.print_exc()
 
