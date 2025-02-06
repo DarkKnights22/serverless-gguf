@@ -25,7 +25,12 @@ sys.excepthook = custom_excepthook
 # Configure logging to make sure it appears in RunPod logs
 logging.basicConfig(level=logging.DEBUG)
 
-gguf_engine = engine.GGUFEngine()
+try:
+    gguf_engine = engine.GGUFEngine()
+except Exception as e:
+    print({"errorrrr456": str(e)})
+    import traceback
+    traceback.print_exc()
 
 
 async def handler(job):
@@ -36,7 +41,7 @@ async def handler(job):
         response = await gguf_engine.async_chat_completion(job_input)
         return response
     except Exception as e:
-        print({"errorrrr": str(e)})
+        print({"errorrrr112": str(e)})
         import traceback
         traceback.print_exc()
 
