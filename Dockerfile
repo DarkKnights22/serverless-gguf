@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     python3-venv \
     python3-pip \
+    nvidia-container-toolkit \
     gcc-12 g++-12 \
     && rm -rf /var/lib/apt/lists/*
 
