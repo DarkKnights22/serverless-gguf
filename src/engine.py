@@ -27,11 +27,7 @@ class GGUFEngine:
             use_mlock=True,
         )
 
-    async def async_chat_completion(self, job):
-        """
-        Runs text generation asynchronously using llm.generate().
-        """
-
+    async def chat_completion(self, job):
         messages = [
             {"role": "system", "content": "You are an assistant who helps with maths problems."},
             {
@@ -42,15 +38,8 @@ class GGUFEngine:
 
         stream = job.get("stream", False)
 
-        response = await asyncio.to_thread(
-            self.llm.create_chat_completion,
-            messages=messages,
-            max_tokens=256,
-            temperature=0.6,  # Adjust as needed
-            stream=stream,
-            response_format={
-                "type": "json_object",
-            },
-        )
-
-        return response
+        return self.llm.create_chat_completion(messages=messages,
+                                               max_tokens=256,
+                                               temperature=0.6,
+                                               stream=stream,
+                                               response_format={"type": "json_object"})

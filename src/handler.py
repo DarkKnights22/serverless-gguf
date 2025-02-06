@@ -33,12 +33,12 @@ except Exception as e:
     traceback.print_exc()
 
 
-async def handler(job):
+def handler(job):
     """ Handler function that will be used to process jobs. """
     try:
         job_input = job["input"]
 
-        response = await gguf_engine.async_chat_completion(job_input)
+        response = gguf_engine.chat_completion(job_input)
         return response
     except Exception as e:
         print({"errorrrr112": str(e)})
