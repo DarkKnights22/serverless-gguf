@@ -39,18 +39,15 @@ class GGUFEngine:
         )
 
     def chat_completion(self, job):
-        logging.info("jobIS", job)
         stream = job.get("stream", False)
 
         logging.info(f"stream: {stream}")
 
         message_input = job["prompt"]
+        
+        logging.info(f"message_input: {message_input}")
         prompt: str = f"<｜User｜>{message_input}<｜Assistant｜>"
 
-        import jsonpickle
-        jsonpickle.set_encoder_options('simplejson', sort_keys=False, indent=4)
-
-        print(jsonpickle.encode(job))
         return self.llm.create_completion(prompt=prompt,
                                           max_tokens=self.max_tokens,
                                           top_p=self.top_p,
