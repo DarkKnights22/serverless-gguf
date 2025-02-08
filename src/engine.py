@@ -19,6 +19,8 @@ class GGUFEngine:
 
         additional_files: list[str] | None = additional_files_str.split(",") if additional_files_str else None
 
+        n_gpu_layers: int = os.getenv("N_GPU_LAYERS", 30)
+
         self.temperature: float = os.getenv("TEMPERATURE", 0.7)
         self.top_p: float = os.getenv("TOP_P", 0.9)
         self.top_k: int = os.getenv("TOP_K", 60)
@@ -35,7 +37,7 @@ class GGUFEngine:
             local_dir=download_dir,
             cache_dir=cache_dir,
             # chat_format=self.chat_format,
-            use_mlock=True,
+            n_gpu_layers=n_gpu_layers,
         )
 
     def chat_completion(self, job):
@@ -44,7 +46,7 @@ class GGUFEngine:
         logging.info(f"stream: {stream}")
 
         message_input = job["prompt"]
-        
+
         logging.info(f"message_input: {message_input}")
         prompt: str = f"<｜User｜>{message_input}<｜Assistant｜>"
 
