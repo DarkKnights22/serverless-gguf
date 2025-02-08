@@ -1,7 +1,8 @@
+import logging
 import os
 
 import llama_cpp
-import logging
+
 
 class GGUFEngine:
     """ GGUF Engine class. """
@@ -41,9 +42,11 @@ class GGUFEngine:
         logging.info("jobIS", job)
         stream = job.get("stream", False)
 
-        chat_history = "<｜User｜>x = 534251<｜Assistant｜>Got it. x = 534251"
-        new_question = "<｜User｜>What's 2+x?<｜Assistant｜>"
-        prompt = chat_history + new_question
+        logging.info(f"stream: {stream}")
+
+        message_input = job["prompt"]
+        prompt: str = f"<｜User｜>{message_input}<｜Assistant｜>"
+
         import jsonpickle
         jsonpickle.set_encoder_options('simplejson', sort_keys=False, indent=4)
 
@@ -55,7 +58,4 @@ class GGUFEngine:
                                           presence_penalty=self.presence_penalty,
                                           frequency_penalty=self.frequency_penalty,
                                           temperature=self.temperature,
-                                          stream=stream,
-                                          # response_format={"type": "json_object"},
-                                          )
-
+                                          stream=stream)
