@@ -36,6 +36,11 @@ except Exception as e:
 def handler(job):
     """ Handler function that will be used to process jobs. """
     try:
+        logging.info("jobIS2", job)
+        import jsonpickle
+        jsonpickle.set_encoder_options('simplejson', sort_keys=False, indent=4)
+
+        print(jsonpickle.encode(job))
         job_input = job["input"]
 
         response = gguf_engine.chat_completion(job_input)

@@ -47,7 +47,7 @@ class GGUFEngine:
         import jsonpickle
         jsonpickle.set_encoder_options('simplejson', sort_keys=False, indent=4)
 
-        jsonpickle.encode(job)
+        print(jsonpickle.encode(job))
         return self.llm.create_completion(prompt=prompt,
                                           max_tokens=self.max_tokens,
                                           top_p=self.top_p,
