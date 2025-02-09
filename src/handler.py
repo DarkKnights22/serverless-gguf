@@ -75,7 +75,7 @@ except Exception as e:
 
     traceback.print_exc()
 
-
+ 
 def handler(job):
     """ Handler function that will be used to process jobs. """
     try:
