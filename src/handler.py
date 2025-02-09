@@ -2,9 +2,9 @@
 
 import logging
 import sys
-import traceback
 
 import runpod
+from runpod.serverless.utils.rp_validator import validate
 
 import engine
 
@@ -25,11 +25,54 @@ sys.excepthook = custom_excepthook
 # Configure logging to make sure it appears in RunPod logs
 logging.basicConfig(level=logging.DEBUG)
 
+schema = {
+    "prompt": {
+        "type": str,
+        "required": True,
+    },
+    "temperature": {
+        "type": float,
+        "required": False,
+        "default": 0.7,
+        "constraints": lambda x: 0.0 <= x <= 1.0,
+    },
+    "top_p": {
+        "type": float,
+        "required": False,
+        "default": 0.9,
+        "constraints": lambda x: 0.0 <= x <= 1.0,
+    },
+    "top_k": {
+        "type": int,
+        "required": False,
+        "default": 60,
+        "constraints": lambda x: x > 0,
+    },
+    "presence_penalty": {
+        "type": float,
+        "required": False,
+        "default": 0.6,
+        "constraints": lambda x: 0.0 <= x <= 1.0,
+    },
+    "frequency_penalty": {
+        "type": float,
+        "required": False,
+        "default": 0.5,
+        "constraints": lambda x: 0.0 <= x <= 1.0,
+    },
+    "stream": {
+        "type": bool,
+        "required": False,
+        "default": False,
+    },
+}
+
 try:
     gguf_engine = engine.GGUFEngine()
 except Exception as e:
     print({"errorrrr456": str(e)})
     import traceback
+
     traceback.print_exc()
 
 
@@ -37,13 +80,26 @@ def handler(job):
     """ Handler function that will be used to process jobs. """
     try:
         logging.info("jobIS2", job)
-        import jsonpickle
-        jsonpickle.set_encoder_options('simplejson', sort_keys=False, indent=4)
+        validated_input = validate(job["input"], schema)
 
-        print(jsonpickle.encode(job))
-        job_input = job["input"]
+        if "errors" in validated_input:
+            return {"error": validated_input["errors"]}
 
-        response = gguf_engine.chat_completion(job_input)
+        prompt = validated_input["validated_input"]["prompt"]
+        temperature = validated_input["validated_input"]["temperature"]
+        top_p = validated_input["validated_input"]["top_p"]
+        top_k = validated_input["validated_input"]["top_k"]
+        presence_penalty = validated_input["validated_input"]["presence_penalty"]
+        frequency_penalty = validated_input["validated_input"]["frequency_penalty"]
+        stream = validated_input["validated_input"]["stream"]
+
+        response = gguf_engine.chat_completion(prompt,
+                                               temperature,
+                                               top_p,
+                                               top_k,
+                                               presence_penalty,
+                                               frequency_penalty,
+                                               stream)
         return response
     except Exception as e:
         print({"errorrrr112": str(e)})

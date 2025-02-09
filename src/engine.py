@@ -21,14 +21,7 @@ class GGUFEngine:
 
         n_gpu_layers: int = os.getenv("N_GPU_LAYERS", 30)
 
-        self.temperature: float = os.getenv("TEMPERATURE", 0.7)
-        self.top_p: float = os.getenv("TOP_P", 0.9)
-        self.top_k: int = os.getenv("TOP_K", 60)
-        self.presence_penalty: float = os.getenv("PRESENCE_PENALTY", 0.6)
-        self.frequency_penalty: float = os.getenv("FREQUENCY_PENALTY", 0.5)
         self.max_tokens: int = os.getenv("MAX_TOKENS", 512)
-
-        # self.chat_format: str = os.getenv("CHAT_FORMAT", "chat_template.default")
 
         self.llm: llama_cpp.Llama = llama_cpp.Llama.from_pretrained(
             repo_id=repo_id,
@@ -36,25 +29,32 @@ class GGUFEngine:
             additional_files=additional_files,
             local_dir=download_dir,
             cache_dir=cache_dir,
-            # chat_format=self.chat_format,
             n_gpu_layers=n_gpu_layers,
         )
 
-    def chat_completion(self, job):
-        stream = job.get("stream", False)
+    def chat_completion(self, prompt: str,
+                        temperature: float,
+                        top_p: float,
+                        top_k: int,
+                        presence_penalty: float,
+                        frequency_penalty: float,
+                        stream: bool):
 
+        prompt: str = f"<｜User｜>{prompt}<｜Assistant｜>"
+
+        logging.info(f"message_input: {prompt}")
+        logging.info(f"temperature: {temperature}")
+        logging.info(f"top_p: {top_p}")
+        logging.info(f"top_k: {top_k}")
+        logging.info(f"presence_penalty: {presence_penalty}")
+        logging.info(f"frequency_penalty: {frequency_penalty}")
         logging.info(f"stream: {stream}")
-
-        message_input = job["prompt"]
-
-        logging.info(f"message_input: {message_input}")
-        prompt: str = f"<｜User｜>{message_input}<｜Assistant｜>"
 
         return self.llm.create_completion(prompt=prompt,
                                           max_tokens=self.max_tokens,
-                                          top_p=self.top_p,
-                                          top_k=self.top_k,
-                                          presence_penalty=self.presence_penalty,
-                                          frequency_penalty=self.frequency_penalty,
-                                          temperature=self.temperature,
+                                          top_p=top_p,
+                                          top_k=top_k,
+                                          presence_penalty=presence_penalty,
+                                          frequency_penalty=frequency_penalty,
+                                          temperature=temperature,
                                           stream=stream)
