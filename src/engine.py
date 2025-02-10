@@ -10,8 +10,10 @@ class GGUFEngine:
     def __init__(self):
         repo_id: str = os.getenv("REPO_ID", "unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF")
 
+        # DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00001-of-00003.gguf
         file_name: str = os.getenv("FILE_NAME", "DeepSeek-R1-Distill-Qwen-1.5B-Q2_K.gguf")
 
+        # DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00002-of-00003.gguf,DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00003-of-00003.gguf
         additional_files_str: str = os.getenv("ADDITIONAL_FILES")
 
         download_dir: str = os.getenv("DOWNLOAD_DIR", f"/workspace/models/{repo_id}")
@@ -19,9 +21,9 @@ class GGUFEngine:
 
         additional_files: list[str] | None = additional_files_str.split(",") if additional_files_str else None
 
-        n_gpu_layers: int = os.getenv("N_GPU_LAYERS", 30)
+        n_gpu_layers: int = int(os.getenv("N_GPU_LAYERS", 30))
 
-        self.max_tokens: int = os.getenv("MAX_TOKENS", 512)
+        self.max_tokens: int = int(os.getenv("MAX_TOKENS", 512))
 
         self.llm: llama_cpp.Llama = llama_cpp.Llama.from_pretrained(
             repo_id=repo_id,
