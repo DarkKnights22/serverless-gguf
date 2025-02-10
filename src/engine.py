@@ -8,6 +8,9 @@ class GGUFEngine:
     """ GGUF Engine class. """
 
     def __init__(self):
+        """ Initialize the GGUF Engine. """
+
+        logging.info("Loading environment variables...")
         repo_id: str = os.getenv("REPO_ID", "unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF")
 
         # DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00001-of-00003.gguf
@@ -25,6 +28,7 @@ class GGUFEngine:
 
         self.max_tokens: int = int(os.getenv("MAX_TOKENS", 512))
 
+        logging.info("Loaded environment variables. Initializing Llama...")
         self.llm: llama_cpp.Llama = llama_cpp.Llama.from_pretrained(
             repo_id=repo_id,
             filename=file_name,
@@ -33,6 +37,8 @@ class GGUFEngine:
             cache_dir=cache_dir,
             n_gpu_layers=n_gpu_layers,
         )
+
+        logging.info("Llama initialized.")
 
     def chat_completion(self, prompt: str,
                         temperature: float,
