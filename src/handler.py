@@ -83,7 +83,8 @@ def handler(job):
         validated_input = validate(job["input"], schema)
 
         if "errors" in validated_input:
-            return {"error": validated_input["errors"]}
+            yield {"error": validated_input["errors"]}
+            return
 
         prompt = validated_input["validated_input"]["prompt"]
         temperature = validated_input["validated_input"]["temperature"]
@@ -93,14 +94,20 @@ def handler(job):
         frequency_penalty = validated_input["validated_input"]["frequency_penalty"]
         stream = validated_input["validated_input"]["stream"]
 
-        response = gguf_engine.chat_completion(prompt,
-                                               temperature,
-                                               top_p,
-                                               top_k,
-                                               presence_penalty,
-                                               frequency_penalty,
-                                               stream)
-        return response
+        response_generator = gguf_engine.chat_completion(prompt,
+                                                         temperature,
+                                                         top_p,
+                                                         top_k,
+                                                         presence_penalty,
+                                                         frequency_penalty,
+                                                         stream)
+
+        for chunk in response_generator:
+            if isinstance(chunk, dict) and "choices" in chunk:
+                # Extract the actual token from the response (modify if needed)
+                text = chunk["choices"][0].get("text", "")
+                yield {"response": text}
+
     except Exception as e:
         print({"errorrrr112": str(e)})
         import traceback
@@ -108,5 +115,6 @@ def handler(job):
 
 
 runpod.serverless.start({
-    "handler": handler
+    "handler": handler,
+    "return_aggregate_stream": True  # Enables real-time streaming in RunPod
 })

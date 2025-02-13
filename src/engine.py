@@ -11,10 +11,10 @@ class GGUFEngine:
         """ Initialize the GGUF Engine. """
 
         logging.info("Loading environment variables...")
-        repo_id: str = os.getenv("REPO_ID", "unsloth/DeepSeek-R1-Distill-Llama-70B-GGUF")
+        repo_id: str = os.getenv("REPO_ID", "unsloth/DeepSeek-R1-Distill-Qwen-1.5B-GGUF")
 
         # DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00001-of-00003.gguf
-        file_name: str = os.getenv("FILE_NAME", "DeepSeek-R1-Distill-Llama-70B-Q4_K_M.gguf")
+        file_name: str = os.getenv("FILE_NAME", "DeepSeek-R1-Distill-Qwen-1.5B-Q2_K.gguf")
 
         # DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00002-of-00003.gguf,DeepSeek-R1-UD-IQ1_S/DeepSeek-R1-UD-IQ1_S-00003-of-00003.gguf
         additional_files_str: str = os.getenv("ADDITIONAL_FILES")
