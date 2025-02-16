@@ -24,6 +24,7 @@ sys.excepthook = custom_excepthook
 
 # Configure logging to make sure it appears in RunPod logs
 logging.basicConfig(level=logging.DEBUG)
+logging.getLogger("huggingface_hub").setLevel(logging.DEBUG)
 
 schema = {
     "prompt": {
