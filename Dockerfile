@@ -4,7 +4,7 @@ WORKDIR /workspace
 
 COPY /src /workspace
 
-RUN pip install runpod huggingface-hub jsonpickle
+RUN pip install huggingface-hub runpod jsonpickle
 
 ENV CUDA_DOCKER_ARCH=all
 ENV LLAMA_CUBLAS=1
