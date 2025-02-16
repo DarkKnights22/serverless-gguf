@@ -20,7 +20,18 @@ class GGUFEngine:
         additional_files_str: str = os.getenv("ADDITIONAL_FILES")
 
         download_dir: str = os.getenv("DOWNLOAD_DIR", f"/workspace/models/{repo_id}")
+        # print each directory in the path
+        print("subdirectories in the path:")
+        for e in os.walk(download_dir):
+            print(e)
+            # if its a directory, print the files in the directory
+            if os.path.isdir(e[0]):
+                print(f"files in {e[0]}:")
+                for f in os.listdir(e[0]):
+                    print(f)
+
         cache_dir: str = "/workspace/hfcache"
+        backslash = "\\"
 
         additional_files: list[str] | None = additional_files_str.split(",") if additional_files_str else None
 
